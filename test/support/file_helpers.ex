@@ -13,7 +13,13 @@ defmodule Support.FileHelpers do
   tailored for this test case and test.
   """
   defmacro in_tmp(fun) do
-    path = Path.join([tmp_path(), "#{__CALLER__.module}", "#{elem(__CALLER__.function, 0)}"])
+    function_name =
+      case __CALLER__.function do
+        {name, _arity} -> name
+        nil -> :unknown
+      end
+
+    path = Path.join([tmp_path(), "#{__CALLER__.module}", "#{function_name}"])
 
     quote do
       path = unquote(path)

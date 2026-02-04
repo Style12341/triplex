@@ -75,7 +75,7 @@ defmodule Triplex do
 
   defp do_reserved_tenant?(prefix) do
     Enum.any?(reserved_tenants(), fn i ->
-      if is_bitstring(prefix) and Regex.regex?(i) do
+      if is_bitstring(prefix) and is_struct(i, Regex) do
         Regex.match?(i, prefix)
       else
         i == prefix
@@ -174,7 +174,7 @@ defmodule Triplex do
   end
 
   defp error_message(msg) do
-    if Exception.exception?(msg) do
+    if is_exception(msg) do
       Exception.message(msg)
     else
       msg

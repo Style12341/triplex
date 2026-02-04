@@ -14,8 +14,9 @@ defmodule Triplex.TestAdapter do
   end
 
   def checkout(_, _, _), do: raise("not implemented")
-  def delete(_, _, _, _), do: raise("not implemented")
-  def insert_all(_, _, _, _, _, _, _), do: raise("not implemented")
+  def checked_out?(_, _opts \\ []), do: false
+  def delete(_, _, _, _, _), do: raise("not implemented")
+  def insert_all(_, _, _, _, _, _, _, _), do: raise("not implemented")
   def rollback(_, _), do: raise("not implemented")
   def stream(_, _, _, _, _), do: raise("not implemented")
   def update(_, _, _, _, _, _), do: raise("not implemented")
@@ -66,7 +67,7 @@ defmodule Triplex.TestAdapter do
 
   ## Migrations
 
-  def lock_for_migrations(_, query, _opts, fun) do
+  def lock_for_migrations(_, query, fun) do
     send(test_process(), {:lock_for_migrations, fun})
     fun.(query)
   end

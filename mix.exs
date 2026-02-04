@@ -4,8 +4,8 @@ defmodule Triplex.Mixfile do
   def project do
     [
       app: :triplex,
-      version: "1.3.0",
-      elixir: "~> 1.7",
+      version: "2.0.0",
+      elixir: "~> 1.19",
       description: "Build multitenant applications on top of Ecto.",
       package: package(),
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -13,7 +13,6 @@ defmodule Triplex.Mixfile do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: preferred_cli_env(),
       deps: deps(),
       docs: [main: "readme", extras: ["README.md", "CHANGELOG.md"]],
       name: "Triplex",
@@ -26,6 +25,19 @@ defmodule Triplex.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [extra_applications: [:logger]]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
+        coveralls: :test,
+        "coveralls.travis": :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "test.reset": :test
+      ]
+    ]
   end
 
   # Specifies which paths to compile per environment.
@@ -47,15 +59,14 @@ defmodule Triplex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:credo, "~> 0.8.10", only: [:test, :dev], optional: true, runtime: false},
-      {:ecto_sql, "~> 3.4"},
-      {:ex_doc, "~> 0.18.0", only: :dev},
-      {:excoveralls, "~> 0.10", only: :test},
-      {:inch_ex, ">= 0.0.0", only: :docs},
-      {:plug, "~> 1.6", optional: true},
-      {:postgrex, ">= 0.15.0", optional: true},
-      {:myxql, ">= 0.3.0", optional: true},
-      {:decimal, ">= 1.6.0"}
+      {:credo, "~> 1.7", only: [:test, :dev], optional: true, runtime: false},
+      {:ecto_sql, "~> 3.12"},
+      {:ex_doc, "~> 0.34", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.18", only: :test},
+      {:plug, "~> 1.16", optional: true},
+      {:postgrex, "~> 0.19", optional: true},
+      {:myxql, "~> 0.7", optional: true},
+      {:decimal, "~> 2.0"}
     ]
   end
 
@@ -83,17 +94,6 @@ defmodule Triplex.Mixfile do
       maintainers: ["Kelvin Stinghen"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/ateliware/triplex"}
-    ]
-  end
-
-  defp preferred_cli_env do
-    [
-      coveralls: :test,
-      "coveralls.travis": :test,
-      "coveralls.detail": :test,
-      "coveralls.post": :test,
-      "coveralls.html": :test,
-      "test.reset": :test
     ]
   end
 
